@@ -1,5 +1,6 @@
 import Pokecard from "@/components/PokemonCard";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const POKEMONS = [
   { number: 1, name: "Bulbizarre", type: "Plante" },
@@ -11,6 +12,12 @@ const POKEMONS = [
 ];
 
 export default function Index() {
+  const [getFilterFire, setFilterFire] = useState(false);
+
+  const displayedPokemons = getFilterFire
+    ? POKEMONS.filter((p) => p.type === "Feu")
+    : POKEMONS;
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -20,16 +27,25 @@ export default function Index() {
         </Text>
       </View>
 
-      <View style={styles.summary}>
-        <Text style={styles.count}>{POKEMONS.length}</Text>
-        <Text style={styles.countLabel}>Pokémons dans ton pokéhess</Text>
-      </View>
+      <Pressable
+        onPress={() => setFilterFire(!getFilterFire)}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>{getFilterFire ? "Tous" : "Feu"}</Text>
+      </Pressable>
 
-      <View style={styles.cardSection}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <Text style={styles.sectionTitle}>Voici les pokémons découverts</Text>
-          {POKEMONS.map((p) => (
-            <Pokecard name={p.name} id={p.number} type={p.type} />
+      <View>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <Text style={styles.sectionTitle}>
+            {displayedPokemons.length} pokémons découverts
+          </Text>
+          {displayedPokemons.map((p) => (
+            <Pokecard
+              key={p.number}
+              name={p.name}
+              id={p.number}
+              type={p.type}
+            />
           ))}
         </ScrollView>
       </View>
@@ -42,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0D1017",
     paddingHorizontal: 24,
-    paddingTop: 72,
+    paddingTop: 60,
   },
   header: {
     maxWidth: 420,
@@ -62,40 +78,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
   },
-  summary: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    paddingVertical: 18,
-    paddingHorizontal: 20,
-    borderRadius: 18,
-    backgroundColor: "#171A24",
-    borderWidth: 1,
-    borderColor: "#2C3142",
-  },
-  count: {
-    marginRight: 12,
-    color: "#F7F8FC",
-    fontSize: 30,
-    fontWeight: "800",
-  },
-  countLabel: {
-    color: "#858CA1",
-    fontSize: 11,
-    fontWeight: "700",
-    letterSpacing: 0.9,
-  },
-  cardSection: {
-    width: "100%",
-    maxWidth: 420,
-    marginTop: 36,
-  },
+
   sectionTitle: {
     marginBottom: 14,
     color: "#D9DCE7",
     fontSize: 14,
     fontWeight: "700",
   },
-  scrollContent: {
+  scrollViewContent: {
     alignItems: "center",
+  },
+  button: {
+    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderColor: "#F08030",
+    borderRadius: 15,
+    paddingVertical: 2,
+    paddingHorizontal: 7,
+
+    alignSelf: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "700",
+    letterSpacing: 0.5,
   },
 });

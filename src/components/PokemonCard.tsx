@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Pokecard({ name, id, type }: PokeCardProps) {
-  const color = TYPE_COLORS[type] ?? "#A78BFA";
+  const color = TYPE_COLORS[type];
 
   return (
     <View style={styles.card}>
