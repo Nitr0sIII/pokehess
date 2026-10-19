@@ -13,10 +13,16 @@ expo-env.d.ts
 .kotlin/
 *.orig.*
 *.jks
+*.keystore
 *.p8
 *.p12
 *.key
+*.cer
+*.crt
+*.der
 *.mobileprovision
+google-services.json
+GoogleService-Info.plist
 
 # Metro
 .metro-health-check*
@@ -25,18 +31,33 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
 # macOS
 .DS_Store
 *.pem
 
 # local env files
+.env
+.env.*
+!.env.example
 .env*.local
+
+# local credentials and configuration
+.npmrc
+.netrc
+credentials*.json
+secrets*.json
+service-account*.json
+*.secret
+*.private.*
 
 # typescript
 *.tsbuildinfo
 
-example
+# local tooling and generated reports
+.cache/
+coverage/
 
 # generated native folders
 /ios
