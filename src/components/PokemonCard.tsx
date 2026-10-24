@@ -1,4 +1,5 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 type PokeCardProps = {
   name: string;
@@ -73,13 +74,26 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "800",
   },
+  buttonsType: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 5,
+    alignItems: "center",
+  },
 });
 
 export default function Pokecard({ name, id, type }: PokeCardProps) {
   const color = TYPE_COLORS[type];
 
+  const [getCaptured, setCaptured] = useState(false);
+
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        { borderColor: getCaptured ? "rgb(71, 148, 58)" : "#2C3142" },
+      ]}
+    >
       <View
         style={[
           styles.artworkContainer,
@@ -95,8 +109,26 @@ export default function Pokecard({ name, id, type }: PokeCardProps) {
       <View style={styles.details}>
         <Text style={styles.number}>#{id}</Text>
         <Text style={styles.name}>{name}</Text>
-        <View style={[styles.typeBadge, { backgroundColor: color }]}>
-          <Text style={styles.type}>{type}</Text>
+        <View style={styles.buttonsType}>
+          <View style={[styles.typeBadge, { backgroundColor: color }]}>
+            <Text style={styles.type}>{type}</Text>
+          </View>
+          <View
+            style={[
+              styles.typeBadge,
+              { backgroundColor: getCaptured ? "#78C850" : "#ae50c8" },
+            ]}
+          >
+            <Pressable
+              onPress={() => {
+                setCaptured(!getCaptured);
+              }}
+            >
+              <Text style={styles.type}>
+                {getCaptured ? "Déjà capturé !" : "Cliquer pour apturer "}
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>
