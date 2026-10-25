@@ -1,7 +1,9 @@
 import Help from "@/components/Help";
 import PokeballsCounter from "@/components/PokeballsCounter";
 import Pokecard from "@/components/PokemonCard";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import ResearchBar from "@/components/ResearchBar";
+import { useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const POKEMONS = [
   { number: 1, name: "Bulbizarre", type: "Plante" },
@@ -105,7 +107,34 @@ const POKEMONS = [
   { number: 99, name: "Krabboss", type: "Eau" },
   { number: 100, name: "Voltorbe", type: "Électrik" },
 ];
+
+const pokemonType: Record<string, string> = {
+  Tous: "#A59D9D",
+  Plante: "#78C850",
+  Feu: "#F08030",
+  Eau: "#6890F0",
+  Électrik: "#F8D030",
+  Insecte: "#A8B820",
+  Normal: "#A8A878",
+  Poison: "#A040A0",
+  Vol: "#A890F0",
+  Combat: "#C03028",
+  Sol: "#E0C068",
+  Roche: "#B8A038",
+  Psy: "#F85888",
+  Glace: "#98D8D8",
+  Spectre: "#705898",
+  Dragon: "#7038F8",
+  Acier: "#B8B8D0",
+  Ténèbres: "#705848",
+  Fée: "#EE99AC",
+};
+
+const pokemonTypeKeys = Object.keys(pokemonType);
+
 export default function Index() {
+  const [getSelectedType, setSelectedType] = useState(0);
+  const [getFilterInput, setFilterInput] = useState("");
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -118,10 +147,48 @@ export default function Index() {
 
       <PokeballsCounter />
 
+      <View style={styles.filterStyles}>
+        <Pressable
+          style={[
+            styles.button,
+            { backgroundColor: pokemonType[pokemonTypeKeys[getSelectedType]] },
+            { width: "50%" },
+          ]}
+          onPress={() => {
+            getSelectedType + 1 == pokemonTypeKeys.length
+              ? setSelectedType(0)
+              : setSelectedType(getSelectedType + 1);
+          }}
+        >
+          <Text>{pokemonTypeKeys[getSelectedType]}</Text>
+        </Pressable>
+
+        <ResearchBar
+          value={getFilterInput}
+          callBack={setFilterInput}
+        ></ResearchBar>
+      </View>
+
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {POKEMONS.map((p) => (
-          <Pokecard name={p.name} id={p.number} type={p.type} />
-        ))}
+        {getSelectedType == 0
+          ? POKEMONS.filter((p) => p.name.includes(getFilterInput)).map((p) => (
+              <Pokecard
+                key={p.number}
+                name={p.name}
+                id={p.number}
+                type={p.type}
+              />
+            ))
+          : POKEMONS.filter((p) => p.type === pokemonTypeKeys[getSelectedType])
+              .filter((p) => p.name.includes(getFilterInput))
+              .map((p) => (
+                <Pokecard
+                  key={p.number}
+                  name={p.name}
+                  id={p.number}
+                  type={p.type}
+                />
+              ))}
       </ScrollView>
     </View>
   );
@@ -173,5 +240,12 @@ const styles = StyleSheet.create({
   whiteText: {
     color: "#FFF",
     marginVertical: 5,
+  },
+  filterStyles: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 5,
   },
 });

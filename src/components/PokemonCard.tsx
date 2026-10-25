@@ -12,10 +12,25 @@ const ARTWORK =
   "/master/sprites/pokemon/other/official-artwork/";
 
 const TYPE_COLORS: Record<string, string> = {
+  Tous: "#A59D9D",
   Plante: "#78C850",
   Feu: "#F08030",
   Eau: "#6890F0",
   Électrik: "#F8D030",
+  Insecte: "#A8B820",
+  Normal: "#A8A878",
+  Poison: "#A040A0",
+  Vol: "#A890F0",
+  Combat: "#C03028",
+  Sol: "#E0C068",
+  Roche: "#B8A038",
+  Psy: "#F85888",
+  Glace: "#98D8D8",
+  Spectre: "#705898",
+  Dragon: "#7038F8",
+  Acier: "#B8B8D0",
+  Ténèbres: "#705848",
+  Fée: "#EE99AC",
 };
 
 const styles = StyleSheet.create({
