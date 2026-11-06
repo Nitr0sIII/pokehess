@@ -1,10 +1,11 @@
-import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 type PokeCardProps = {
   name: string;
   id: number;
   type: string;
+  onPressed: () => void;
+  alreadyCaptured: boolean;
 };
 
 const ARTWORK =
@@ -35,11 +36,12 @@ const TYPE_COLORS: Record<string, string> = {
 
 const styles = StyleSheet.create({
   card: {
-    width: "90%",
+    width: "45%",
     maxWidth: 360,
     minHeight: 132,
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
     padding: 10,
     margin: 8,
     borderRadius: 24,
@@ -66,6 +68,7 @@ const styles = StyleSheet.create({
   },
   details: {
     justifyContent: "center",
+    alignItems: "center",
     gap: 8,
   },
   number: {
@@ -79,7 +82,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   typeBadge: {
-    alignSelf: "flex-start",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 999,
@@ -91,22 +93,27 @@ const styles = StyleSheet.create({
   },
   buttonsType: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     gap: 5,
     alignItems: "center",
+    justifyContent: "center",
   },
 });
 
-export default function Pokecard({ name, id, type }: PokeCardProps) {
+export default function Pokecard({
+  name,
+  id,
+  type,
+  onPressed,
+  alreadyCaptured,
+}: PokeCardProps) {
   const color = TYPE_COLORS[type];
-
-  const [getCaptured, setCaptured] = useState(false);
 
   return (
     <View
       style={[
         styles.card,
-        { borderColor: getCaptured ? "rgb(71, 148, 58)" : "#2C3142" },
+        { borderColor: alreadyCaptured ? "rgb(71, 148, 58)" : "#2C3142" },
       ]}
     >
       <View
@@ -131,16 +138,12 @@ export default function Pokecard({ name, id, type }: PokeCardProps) {
           <View
             style={[
               styles.typeBadge,
-              { backgroundColor: getCaptured ? "#78C850" : "#ae50c8" },
+              { backgroundColor: alreadyCaptured ? "#78C850" : "#ae50c8" },
             ]}
           >
-            <Pressable
-              onPress={() => {
-                setCaptured(!getCaptured);
-              }}
-            >
+            <Pressable onPress={onPressed}>
               <Text style={styles.type}>
-                {getCaptured ? "Déjà capturé !" : "Cliquer pour apturer "}
+                {alreadyCaptured ? "Déjà capturé !" : "Cliquer pour capturer"}
               </Text>
             </Pressable>
           </View>

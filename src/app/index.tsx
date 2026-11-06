@@ -3,7 +3,14 @@ import PokeballsCounter from "@/components/PokeballsCounter";
 import Pokecard from "@/components/PokemonCard";
 import ResearchBar from "@/components/ResearchBar";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const POKEMONS = [
   { number: 1, name: "Bulbizarre", type: "Plante" },
@@ -135,6 +142,7 @@ const pokemonTypeKeys = Object.keys(pokemonType);
 export default function Index() {
   const [getSelectedType, setSelectedType] = useState(0);
   const [getFilterInput, setFilterInput] = useState("");
+  const [getCaptured, setCaptured] = useState<number[]>([]);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -169,27 +177,28 @@ export default function Index() {
         ></ResearchBar>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {getSelectedType == 0
-          ? POKEMONS.filter((p) => p.name.includes(getFilterInput)).map((p) => (
-              <Pokecard
-                key={p.number}
-                name={p.name}
-                id={p.number}
-                type={p.type}
-              />
-            ))
-          : POKEMONS.filter((p) => p.type === pokemonTypeKeys[getSelectedType])
-              .filter((p) => p.name.includes(getFilterInput))
-              .map((p) => (
-                <Pokecard
-                  key={p.number}
-                  name={p.name}
-                  id={p.number}
-                  type={p.type}
-                />
-              ))}
-      </ScrollView>
+      <FlatList
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapper}
+        data={POKEMONS.filter(
+          (p) =>
+            (getSelectedType === 0 ||
+              p.type === pokemonTypeKeys[getSelectedType]) &&
+            p.name.includes(getFilterInput),
+        )}
+        keyExtractor={(item) => String(item.number)}
+        renderItem={({ item }) => (
+          <Pokecard
+            onPressed={() => setCaptured(() => [...getCaptured, item.number])}
+            name={item.name}
+            id={item.number}
+            type={item.type}
+            alreadyCaptured={getCaptured.includes(item.number)}
+          />
+        )}
+      />
+
+      <ScrollView contentContainerStyle={styles.scrollViewContent}></ScrollView>
     </View>
   );
 }
@@ -247,5 +256,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     gap: 5,
+  },
+  columnWrapper: {
+    justifyContent: "center",
   },
 });
