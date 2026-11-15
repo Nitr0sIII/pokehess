@@ -1,5 +1,8 @@
 import { Stack } from "expo-router";
-
-export default function RootLayout() {
-   return <Stack screenOptions={{ headerShown: false }} />;
+export default function Layout() {
+  return (
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> 1
+    </Stack>
+  );
 }

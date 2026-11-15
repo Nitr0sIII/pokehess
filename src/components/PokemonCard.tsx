@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 type PokeCardProps = {
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     height: 100,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 16,
+    marginBottom: 8,
     borderRadius: 20,
     backgroundColor: "#222735",
   },
@@ -100,17 +101,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Pokecard({
+export default function PokemonCard({
   name,
   id,
   type,
   onPressed,
   alreadyCaptured,
 }: PokeCardProps) {
+  const router = useRouter();
   const color = TYPE_COLORS[type];
 
   return (
-    <View
+    <Pressable
+      onPress={() => router.push(`/pokemon/${id}` as any)}
       style={[
         styles.card,
         { borderColor: alreadyCaptured ? "rgb(71, 148, 58)" : "#2C3142" },
@@ -122,11 +125,7 @@ export default function Pokecard({
           { borderColor: color, borderWidth: 1 },
         ]}
       >
-        <Image
-          source={{ uri: `${ARTWORK}${id}.png` }}
-          style={styles.artwork}
-          accessibilityLabel={`Illustration de ${name}`}
-        />
+        <Image source={{ uri: `${ARTWORK}${id}.png` }} style={styles.artwork} />
       </View>
       <View style={styles.details}>
         <Text style={styles.number}>#{id}</Text>
@@ -149,6 +148,6 @@ export default function Pokecard({
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
